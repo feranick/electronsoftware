@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>3D Photovoltaics Calculator</title>
+  
+
+  
+  
+  <script type="text/javascript">
+
+      ec_flat=0.218053*1; // kWh 2011
+      ec_cube=0.63213*1;  // kWh 2011
+      ec_tall=1.007917*1; // kWh 2011
+      ec_tower=2.889*1;  // kWh 2011
+      W_m2=160.3861*1;  // W/m^2
+      area_single=0.0012951*1; // area single cell m^2
+      
+
+function convert()
+
+{
+    cost_mod_W = document.pv.cmod.value*1;
+    cost_bos_W = document.pv.cbos.value*1;
+    cost_bos3d_W = document.pv.cbos3d.value*1;
+    
+    tot_cost_W=cost_mod_W + cost_bos_W;
+    tot_cost3d_W=cost_mod_W + cost_bos3d_W;
+
+    //document.pv.ctot.value=tot_cost_W.toFixed(2);
+    //document.pv.ctot3d.value=tot_cost3d_W.toFixed(2);
+
+    document.getElementById("ctot").innerHTML = tot_cost_W.toFixed(2);
+    document.getElementById("ctot3d").innerHTML = tot_cost3d_W.toFixed(2);
+
+    
+    Wh_req = document.pv.Wh_req.value*1;    
+    
+	    
+	if(isNaN(document.pv.Wh_req.value))
+
+		{document.getElementById("warning").innerHTML = "Not a valid number.";
+        document.pv.kWh_req.value="";}
+
+	else
+
+	{	// Conversion
+        
+        
+        kWh_req=Wh_req*365/1000;
+        //document.pv.kWh_req.value=kWh_req.toFixed(0);
+        document.getElementById("kWh_req").innerHTML = kWh_req.toFixed(0);
+
+        
+        cost_m2_flat = tot_cost_W * W_m2;
+        cost_m2_cube= tot_cost3d_W * W_m2*9;
+        cost_m2_tall=tot_cost3d_W * W_m2*17;
+        cost_m2_tower=tot_cost3d_W * W_m2*36;
+        
+        document.getElementById("cost_m2_flat").innerHTML = cost_m2_flat.toFixed(0);
+        document.getElementById("cost_m2_cube").innerHTML = cost_m2_cube.toFixed(0);
+        document.getElementById("cost_m2_tall").innerHTML = cost_m2_tall.toFixed(0);
+        document.getElementById("cost_m2_tower").innerHTML = cost_m2_tower.toFixed(0);
+        
+        
+        times_sm_cell_flat=kWh_req/ec_flat;
+        times_sm_cell_cube=kWh_req/ec_cube;
+        times_sm_cell_tall=kWh_req/ec_tall;
+        times_sm_cell_tower=kWh_req/ec_tower;
+         
+        footprint_flat=times_sm_cell_flat*area_single;
+        footprint_cube=times_sm_cell_cube*area_single;
+        footprint_tall=times_sm_cell_tall*area_single;
+        footprint_tower=times_sm_cell_tower*area_single;
+        
+        document.getElementById("footprint_flat").innerHTML = footprint_flat.toFixed(2);
+        document.getElementById("footprint_cube").innerHTML = footprint_cube.toFixed(2);
+        document.getElementById("footprint_tall").innerHTML = footprint_tall.toFixed(2);
+        document.getElementById("footprint_tower").innerHTML = footprint_tower.toFixed(2);
+         
+        cost_flat=cost_m2_flat*footprint_flat;
+        cost_cube=cost_m2_cube*footprint_cube;
+        cost_tall=cost_m2_tall*footprint_tall;
+        cost_tower=cost_m2_tower*footprint_tower;
+         
+        document.getElementById("cost_flat").innerHTML = cost_flat.toFixed(0);
+        document.getElementById("cost_cube").innerHTML = cost_cube.toFixed(0);
+        document.getElementById("cost_tall").innerHTML = cost_tall.toFixed(0);
+        document.getElementById("cost_tower").innerHTML = cost_tower.toFixed(0);
+
+
+		document.getElementById("warning").innerHTML = "";
+
+        
+		
+	}
+         
+}
+
+      
+function costmodule()
+      {
+          var index = document.pv.comodule.selectedIndex;
+          
+          if(index==0)
+          {document.pv.cmod.value=2.47;}
+          if(index==1)
+          {document.pv.cmod.value=1.23;}
+          if(index==2)
+          {document.pv.cmod.value=0.5;}
+          
+          convert();
+      }
+      
+function costbos()
+      {
+          var index = document.pv.cobos.selectedIndex;
+          
+          if(index==0)
+          {document.pv.cbos.value=1.33;}
+          if(index==1)
+          {document.pv.cbos.value=0.97;}
+          if(index==2)
+          {document.pv.cbos.value=0.4;}
+          
+          convert();
+      }  
+    
+    function costbos3d()
+    {
+        var index = document.pv.cobos3d.selectedIndex;
+        
+        if(index==0)
+        {document.pv.cbos3d.value=1.33;}
+        if(index==1)
+        {document.pv.cbos3d.value=0.97;}
+        if(index==2)
+        {document.pv.cbos3d.value=0.4;}
+        
+        convert();
+    }  
+
+function resetform()
+
+	{document.pv.Wh_req.value=1200;
+        document.pv.comodule.selectedIndex=0;
+        document.pv.cobos.selectedIndex=0;
+        document.pv.cobos3d.selectedIndex=0;
+        costmodule();
+        costbos();
+        costbos3d();
+        costmod();
+    
+	convert();
+	}
+
+
+function init() {
+    document.pv.comodule.selectedIndex=0;
+    document.pv.cobos.selectedIndex=0;
+    document.pv.cobos.selectedIndex=0;
+    costmodule();
+    costbos();
+    costbos3d();
+	convert();  
+    }
+
+
+    window.onload = init;
+
+
+
+
+  </script></head><body>
+<form name="pv"> <big><span style="font-weight: bold;">3D Photovoltaics 
+Calculator</span></big><br>
+  <font size="4"><a href="m/3dpv"><small><small>Click here for mobile
+version for iPhone</small></small></a></font><br>
+  <br>
+Required energy demand per day: <input name="Wh_req" value="1200" size="12" maxlength="12" onkeyup="convert()" type="text"> Wh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <small>
+    
+    <br><label id="warning" size="12" maxlength="12" type="text"></label></small> <br>
+Required energy demand per year: <label id="kWh_req" size="12" maxlength="12" type="text"></label> kWh<br>
+  <br>
+  <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <tbody>
+      <tr align="center">
+        <td colspan="3" rowspan="1" style="vertical-align: top;"> Cost
+module [USD]
+        <select name="comodule" onchange="costmodule()" onblur="costmodule()">
+        <option>2010</option>
+        <option>2016</option>
+        <option>SunShot</option>
+        </select>
+        <input name="cmod" value="" size="12" maxlength="12" onkeyup="convert()" type="text"> </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top; text-align: center;"><br>
+        </td>
+        <td style="vertical-align: top; text-align: center;">2D<br>
+        </td>
+        <td style="vertical-align: top; text-align: center;">3D<br>
+        </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top; text-align: center;">Cost
+Balance of Systems [USD] <br>
+        </td>
+        <td style="vertical-align: top; text-align: center;">
+        <select name="cobos" onchange="costbos()" onblur="costbos()">
+        <option>2010</option>
+        <option>2016</option>
+        <option>SunShot</option>
+        </select>
+        <input name="cbos" value="" size="12" maxlength="12" onkeyup="convert()" type="text"></td>
+        <td style="vertical-align: top; text-align: center;">
+        <select name="cobos3d" onchange="costbos3d()" onblur="costbos3d()">
+        <option>2010</option>
+        <option>2016</option>
+        <option>SunShot</option>
+        </select>
+        <input name="cbos3d" value="" size="12" maxlength="12" onkeyup="convert()" type="text"></td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top; text-align: center;">
+            Total Cost [USD]<br>
+        </td>
+        <td style="vertical-align: top; text-align: center;"><label id="ctot" size="12" maxlength="12" type="text"></label></td>
+        <td style="vertical-align: top; text-align: center;"><label id="ctot3d" size="12" maxlength="12" type="text"></label></td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+    <tbody>
+      <tr>
+        <td style="vertical-align: top;"><br>
+        </td>
+        <td style="vertical-align: top;">Flat<br>
+        </td>
+        <td style="vertical-align: top;">Cube<br>
+        </td>
+        <td style="vertical-align: top;">Tall<br>
+        </td>
+        <td style="vertical-align: top;">Tower<br>
+        </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;"> Cost/m<sup>2</sup> [USD]:</td>
+        <td style="vertical-align: top;"><label id="cost_m2_flat" size="12" maxlength="12" type="text"></label><br>
+        </td>
+        <td style="vertical-align: top;"><label id="cost_m2_cube" size="12" maxlength="12" type="text"></label><br>
+        </td>
+        <td style="vertical-align: top;"><label id="cost_m2_tall" size="12" maxlength="12" type="text"></label><br>
+        </td>
+        <td style="vertical-align: top;"><label id="cost_m2_tower" size="12" maxlength="12" type="text"></label><br>
+        </td>
+      </tr>
+        <tr>
+            <td style="vertical-align: top;">Final cost [USD]:</td>
+            <td style="vertical-align: top;"><label id="cost_flat" size="12" maxlength="12" type="text"></label>
+                <br>
+            </td>
+            <td style="vertical-align: top;"><label id="cost_cube" size="12" maxlength="12" type="text"></label>
+                <br>
+            </td>
+            <td style="vertical-align: top;"><label id="cost_tall" size="12" maxlength="12" type="text"></label>
+                <br>
+            </td>
+            <td style="vertical-align: top;"><label id="cost_tower" size="12" maxlength="12" type="text"></label>
+                <br>
+            </td>
+        </tr>
+      <tr>
+        <td style="vertical-align: top;">Footprint [m<sup>2</sup>]:</td>
+        <td style="vertical-align: top;"><label id="footprint_flat" size="12" maxlength="12" type="text"></label>
+        <br>
+</td>
+        <td style="vertical-align: top;"><label id="footprint_cube" size="12" maxlength="12" type="text"></label>
+        <br>
+</td>
+        <td style="vertical-align: top;"><label id="footprint_tall" size="12" maxlength="12" type="text"></label>
+        <br>
+</td>
+        <td style="vertical-align: top;"><label id="footprint_tower" size="12" maxlength="12" type="text"></label>
+        <br>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <br>
+  <input value="Reset" onclick="resetform()" type="button"></form>
+
+</body></html>

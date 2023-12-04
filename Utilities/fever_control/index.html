@@ -1,0 +1,130 @@
+<html manifest="pv.manifest">
+    <html><head>
+        <title>>Fever Control Calculator</title>
+        
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" />
+        
+        <!-- Eliminate url and button bars if added to home screen -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        
+        <!-- Choose how to handle the phone status bar -->
+        <meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        
+        <link rel="stylesheet" href="fc.css" media="screen" />
+        
+        <!-- Choose a 57x57 image for the icon -->
+        <link rel="apple-touch-icon" href="fc_icon.png" />
+
+
+        <script type="text/javascript">
+            var ib=0.2*1;
+            var ac=40*1;
+            var ac0=0.3633*1;
+            var ac1=0.00776*1;
+            
+            function dosage()
+            {
+                var index=document.fever.type.selectedIndex *1;
+                var w=document.fever.w.value *1;
+                var unmg=50.0*1;
+                var unml=1.25*1;
+                var unml2=2.5*1;
+                var dmg=1*1;
+                var dml=1*1;
+                var un=1*1;
+                
+                
+                document.getElementById("warning").innerHTML = " ";
+                //document.getElementById("warning").innerHTML = w.toFixed(0);
+                
+                if (index==0)
+                {
+                    if(w<10.0)
+                    {un=0;}
+                    if(w>=10.0 && w<=30)
+                    {un=ib*w;}
+                    if(w>30)
+                    {un=0;
+                        document.getElementById("warning").innerHTML = "Over the prescribed values - Consult pediatrician";}
+                    
+                    document.getElementById("value").innerHTML = (unmg*un).toFixed(0) + " mg";
+                    document.getElementById("value2").innerHTML = (unml2*un).toFixed(2) + " ml ";
+                    document.getElementById("value3").innerHTML = (un/2).toFixed(1) + " syringes (5ml) - " + (un/2).toFixed(1) + " tsp";
+                    
+                }
+                if (index==1)
+                {
+                    if(w<10.0)
+                    {un=0;}
+                    if(w>=10.0 && w<=30)
+                    {un=ib*w;}
+                    if(w>30)
+                    {un=0;
+                        document.getElementById("warning").innerHTML = "Over the prescribed values - Consult pediatrician";}
+                    
+                    document.getElementById("value").innerHTML = (unmg*un).toFixed(0) + " mg";
+                    document.getElementById("value2").innerHTML = (unml*un).toFixed(2) + " ml ";
+                    document.getElementById("value3").innerHTML = (un).toFixed(1) + " syringes (1.25ml)";
+                    
+                    
+                }
+                
+                if(index==2)
+                {
+                    if(w<2.7)
+                    {un=0;
+                        document.getElementById("warning").innerHTML = "Under the prescribed values - Consult pediatrician";}
+                    if(w>=2.7 && w<=32.7)
+                    {un=ac0*w+ac1;
+                    }
+                    if(w>43.1)
+                    {un=0;
+                        document.getElementById("warning").innerHTML = "Over the prescribed values - Consult pediatrician";}
+                    
+                    
+                    
+                    document.getElementById("value").innerHTML = (ac*un).toFixed(0) + " mg";
+                    document.getElementById("value2").innerHTML = (unml*un).toFixed(2) + " ml ";
+                    document.getElementById("value3").innerHTML = (unml*un/5).toFixed(1) + " tsp - " + (unml*un/10).toFixed(1) + " suppository";
+                    
+                    
+                }
+                
+                
+            }
+            
+            
+            function resetform()
+            {document.fever.type.selectedIndex=0;
+                document.fever.weight.value="15";
+                dosage();
+            }
+            
+            
+            window.onload = function() {
+                
+                document.fever.type.selectedIndex=0;
+                dosage();
+            }
+            
+            </script>
+        
+        </font>
+    </head>
+        <body>
+            <font size="4"><b><big>Fever Control Calculator</b></big><br><br>
+                
+                <form name="fever"><font size="4">
+                    1.  Medication <br> <select name="type" onchange="dosage()" onblur="dosage()"><option>Ibuprofen Children - 100mg/5ml (Motrin, Advil)</option><option>Ibuprofen Infant Drops - 200mg/5cc (Motrin, Advil)</option><option>Acetaminophen - Elixir 160mg/5ml (Tylenol)</option></select><br>
+                    <br>2. Weigth<br> <input name="w" value="15" size="12" maxlength="12" onkeyup="dosage()" type="text" id="Entry"> Kg<br>
+                        
+                        <br><br>3. Dosage <label id="med" size="12" maxlength="12" type="text"></b></label>
+                        <br><b><label id="value" size="12" maxlength="12" type="text"></b></label><br><b><label id="value2" size="12" maxlength="12" type="text"></b></label>
+                        <br><b><label id="value3" size="12" maxlength="12" type="text"></b></label>
+                        <br><br><input value="Reset" onclick="resetform()" type="button" id="Reset">
+                            <br><br><b><label id="warning" size="12" maxlength="12" type="text"></b></label>
+                            </form>
+                <br><hr style="width: 100%; height: 2px;">
+                <small><small><small>v. 20121026a<br>This tool must not be used as a substitute for doctors prescriptions or official information charts.</b><br> Dosage based on information charts provided with medications.<br> We are in no way responsible for any mistake. <br> We are not affiliated nor endorsed by any of the manufacturers of these medications.</small></small></small>
+                
+                </body></html>
